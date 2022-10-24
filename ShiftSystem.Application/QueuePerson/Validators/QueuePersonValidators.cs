@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShiftSystem.Domain.Entities
+namespace ShiftSystem.Application.QueuePerson.Validators
 {
-    public class Queue : BaseEntity
+    public class QueuePersonValidators
     {
-        public string name { get; set; }
     }
 }

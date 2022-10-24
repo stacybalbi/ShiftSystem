@@ -8,8 +8,8 @@ namespace ShiftSystem.Domain.Enums
 {
     public enum Status
     {
-        Active,
-        Inactive,
-        OnStandby
+        Active = 0,
+        Inactive = 1,
+        OnStandby = 2        
     }
 }

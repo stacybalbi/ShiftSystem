@@ -1,4 +1,5 @@
 ﻿using ShiftSystem.Application.Generic.Dto;
+using ShiftSystem.Application.Person.Dto;
 using ShiftSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace ShiftSystem.Application.Queue.Dto
 {
     public class QueueDto : BaseDto
     {
-        public Domain.Entities.Person Person { get; set; }
+        public string name { get; set; }
     }
 }

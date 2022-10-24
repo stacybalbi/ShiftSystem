@@ -10,6 +10,7 @@ namespace ShiftSystem.Domain.Entities
     public class Person : BaseEntity
     {
         public string Name { get; set; }
-        public Status status { get; set; }
+
+        public int Cedula { get; set; }
     }
 }

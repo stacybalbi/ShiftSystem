@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShiftSystem.Application.Generic.Handlers;
 using ShiftSystem.Application.Generic.Interfaces;
+using ShiftSystem.Application.Interfaces;
 using ShiftSystem.Application.Queue.Dto;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,11 @@ namespace ShiftSystem.Application.Queue.Handlers
         new Task<QueueDto> Update(QueueDto dto);
         new Task<QueueDto> Update(int id, QueueDto dto);
         new Task<QueueDto> Create(QueueDto dto);
+        Task<List<QueueDto>> GetAll(int top = 50);
     }
     public class QueueHandler : BaseCrudHandler<QueueDto, Domain.Entities.Queue>, IQueueHandler
     {
-        public QueueHandler(IBaseCrudService<Domain.Entities.Queue> crudService, IMapper mapper) : base(crudService, mapper)
+        public QueueHandler(IQueueService crudService, IMapper mapper) : base(crudService, mapper)
         {
         }
 
@@ -41,6 +43,13 @@ namespace ShiftSystem.Application.Queue.Handlers
         public new async Task<QueueDto> Create(QueueDto dto)
         {
             return await base.Create(dto);
+
+           
+        }
+
+        public async Task<List<QueueDto>> GetAll(int top = 50)
+        {
+            return  await base.Get(top);
         }
     }
 }

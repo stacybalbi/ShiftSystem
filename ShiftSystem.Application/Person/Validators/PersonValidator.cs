@@ -17,12 +17,6 @@ namespace ShiftSystem.Application.Person.Validators
                 .WithName("Invalid-name")
                 .WithMessage("Invalid Name");
 
-            RuleFor(x => x.status)
-                .NotEmpty()
-                .WithName("Invalid-name")
-                .WithMessage("Invalid Status");
-
-
         }
     }
 }

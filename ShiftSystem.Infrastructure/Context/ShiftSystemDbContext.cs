@@ -22,6 +22,7 @@ namespace ShiftSystem.Infrastructure.Context
         public DbSet<Person> Person { get; set; }
 
         public DbSet<Queue> Queue { get; set; }
+        public DbSet<QueuePerson> QueuePerson { get; set; }
 
         public ShiftSystemDbContext(DbContextOptions<ShiftSystemDbContext> options) : base(options) { }
 

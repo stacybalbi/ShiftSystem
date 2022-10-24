@@ -11,6 +11,5 @@ namespace ShiftSystem.Application.Person.Dto
     public class PersonDto : BaseDto
     {
         public string Name { get; set; }
-        public Status status { get; set; }
     }
 }

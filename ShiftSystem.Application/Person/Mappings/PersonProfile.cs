@@ -10,6 +10,10 @@ namespace ShiftSystem.Application.Person.Mappings
 {
     public class PersonProfile : Profile
     {
-        public PersonProfile(){CreateMap<Domain.Entities.Person, PersonDto>();}
+        public PersonProfile()
+        {
+            CreateMap<Domain.Entities.Person, PersonDto>();
+            CreateMap<PersonDto, Domain.Entities.Person>();
+        }
     }
 }

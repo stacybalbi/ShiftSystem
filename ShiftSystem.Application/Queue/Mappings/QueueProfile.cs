@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ShiftSystem.Application.Person.Dto;
+using ShiftSystem.Application.Queue.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,9 @@ namespace ShiftSystem.Application.Queue.Mappings
 {
     public class QueueProfile : Profile
     {
-       public QueueProfile(){CreateMap<Domain.Entities.Person, PersonDto>();}
+       public QueueProfile(){
+            CreateMap<Domain.Entities.Queue, QueueDto>();
+            CreateMap<QueueDto, Domain.Entities.Queue>();
+        }
     }
 }

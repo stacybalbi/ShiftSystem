@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShiftSystem.Application.Generic.Handlers;
 using ShiftSystem.Application.Generic.Interfaces;
+using ShiftSystem.Application.Interfaces;
 using ShiftSystem.Application.Person.Dto;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,11 @@ namespace ShiftSystem.Application.Person.Handlers
         new Task<PersonDto> Update(PersonDto dto);
         new Task<PersonDto> Update(int id, PersonDto dto);
         new Task<PersonDto> Create(PersonDto dto);
+        new Task<List<PersonDto>> Get(int top);
     }
     public class PersonHandler : BaseCrudHandler<PersonDto, Domain.Entities.Person>, IPersonHandler
     {
-        public PersonHandler(IBaseCrudService<Domain.Entities.Person> crudService, IMapper mapper) : base(crudService, mapper)
+        public PersonHandler(IPersonService crudService, IMapper mapper) : base(crudService, mapper)
         {
         }
 
@@ -41,6 +43,11 @@ namespace ShiftSystem.Application.Person.Handlers
         public new async Task<PersonDto> Create(PersonDto dto)
         {
             return await base.Create(dto);
+        }
+
+        public async Task<List<PersonDto>> Get(int top)
+        {
+            return await base.Get(top);
         }
     }
 }
