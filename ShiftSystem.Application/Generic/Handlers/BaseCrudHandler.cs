@@ -2,6 +2,7 @@
 using ShiftSystem.Application.Generic.Dto;
 using ShiftSystem.Application.Generic.Interfaces;
 using ShiftSystem.Application.Person.Dto;
+using ShiftSystem.Application.QueuePerson.Dto;
 using ShiftSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace ShiftSystem.Application.Generic.Handlers
 {
     public class BaseCrudHandler<TDto, TEntity> : IBaseCrudHandler<TDto, TEntity> where TDto : BaseDto where TEntity : BaseEntity
     {
-
         private readonly IBaseCrudService<TEntity> _crudService;
         public readonly IMapper _mapper;
 
@@ -66,5 +66,6 @@ namespace ShiftSystem.Application.Generic.Handlers
             return _mapper.Map(entity, dto);
         }
 
+        
     }
 }

@@ -12,5 +12,7 @@ namespace ShiftSystem.Domain.Entities
         public string Name { get; set; }
 
         public int Cedula { get; set; }
+
+
     }
 }

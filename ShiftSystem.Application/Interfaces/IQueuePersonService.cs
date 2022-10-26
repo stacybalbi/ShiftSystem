@@ -11,8 +11,9 @@ namespace ShiftSystem.Application.Interfaces
 {
     public interface IQueuePersonService : IBaseCrudService<Domain.Entities.QueuePerson>
     {
-        List<QueuePersonDto> GetByQueueId(int queueId);
         Task Put(QueuePersonDto dto);
         Task Push(int queueId);
+        void Put(int queueId);
+
     }
 }

@@ -14,57 +14,79 @@ namespace ShiftSystem.Application.QueuePerson.Handlers
 {
     public interface IQueuePersonHandler : IBaseCrudHandler<QueuePersonDto, Domain.Entities.QueuePerson>
     {
-        new Task<QueuePersonDto> GetById(int id);
-        new Task<QueuePersonDto> Update(QueuePersonDto dto);
-        new Task<QueuePersonDto> Update(int id, QueuePersonDto dto);
-        new Task<QueuePersonDto> Create(QueuePersonDto dto);
         Task<List<QueuePersonDto>> GetByQueueId(int queueId);
         Task Put (QueuePersonDto dto);
-        Task Push(int queueId);
+        Task<Task> Push(int queueId);
     }
 
 
     public class QueuePersonHandler : BaseCrudHandler<QueuePersonDto, Domain.Entities.QueuePerson>, IQueuePersonHandler
     {
         private readonly IQueuePersonService _crudService;
+        private readonly IMapper _mapper;
+
         public QueuePersonHandler(IQueuePersonService crudService, IMapper mapper) : base(crudService, mapper)
         {
             _crudService = crudService;
+            _mapper = mapper;
         }
 
-        public new async Task<QueuePersonDto> GetById(int id)
-        {
-            return await base.GetById(id);
-        }
-
-        public new async Task<QueuePersonDto> Update(QueuePersonDto dto)
-        {
-            return await base.Update(dto);
-        }
-
-        public new async Task<QueuePersonDto> Update(int id, QueuePersonDto dto)
-        {
-            return await base.Update(id, dto);
-        }
-
-        public new async Task<QueuePersonDto> Create(QueuePersonDto dto)
-        {
-            return await base.Create(dto);
-        }
 
         public async Task<List<QueuePersonDto>> GetByQueueId(int queueId)
         {
-            return _crudService.GetByQueueId(queueId);
+            return _mapper.Map<List<QueuePersonDto>>(_crudService.Query().Where(QueuePerson => QueuePerson.QueueId == queueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
+                                                           .OrderBy(QueuePerson => QueuePerson.Created)
+                                                           .ToList());
         }
 
         public async Task Put(QueuePersonDto dto)
         {
-            await _crudService.Put(dto);
+            var queue = _crudService.Query().Where(QueuePerson => QueuePerson.QueueId == dto.QueueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
+                                               .OrderBy(QueuePerson => QueuePerson.Created).ToList();
+
+            if (queue.Any(x => x.PersonId == dto.PersonId))
+                throw new Exception("No se puede agregar la persona a la fila más de una vez.");
+
+            QueuePersonDto entity = new QueuePersonDto
+            {
+                Created = DateTime.Now,
+                PersonId = dto.PersonId,
+                QueueId = dto.QueueId,
+                Status = Domain.Enums.Status.OnStandby
+            };
+            await _crudService.Put(entity);
+           
         }
 
-        public async Task Push(int queueId)
+        public async Task<Task> Push(int queueId)
         {
-            await _crudService.Push(queueId);
+            var queueValuesQueryable = _crudService.Query().Where(QueuePerson => QueuePerson.QueueId == queueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
+                                            .OrderBy(QueuePerson => QueuePerson.Created);
+
+            var current = queueValuesQueryable.FirstOrDefault();
+
+            if (current != null)
+            {
+                if (current.Status == Domain.Enums.Status.OnStandby)
+                {
+                    current.Status = Domain.Enums.Status.Active;
+                    _crudService.Update(current);
+                }
+                else if (current.Status == Domain.Enums.Status.Active)
+                {
+                    current.Status = Domain.Enums.Status.Inactive;
+                    _crudService.Update(current);
+                    var next = queueValuesQueryable.Skip(1).FirstOrDefault();
+                    if (next != null)
+                    {
+                        next.Status = Domain.Enums.Status.Active;
+                        _crudService.Update(next);
+                    }
+                }
+            }
+            _crudService.Push(queueId);
+            return Task.CompletedTask;
+
 
         }
     }

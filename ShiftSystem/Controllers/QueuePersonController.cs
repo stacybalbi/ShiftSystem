@@ -2,6 +2,7 @@
 using ShiftSystem.Application.Queue.Handlers;
 using ShiftSystem.Application.QueuePerson.Dto;
 using ShiftSystem.Application.QueuePerson.Handlers;
+using ShiftSystem.Infrastructure.Context;
 
 namespace ShiftSystem.API.Controllers
 {
@@ -10,9 +11,11 @@ namespace ShiftSystem.API.Controllers
     public class QueuePersonController : ControllerBase
     {
         private readonly IQueuePersonHandler _queuePersonHandler;
-        public QueuePersonController(IQueuePersonHandler queuePersonHandler)
+        private readonly IShiftSystemDbContext _dbcontext;
+        public QueuePersonController(IQueuePersonHandler queuePersonHandler, IShiftSystemDbContext dbconext)
         {
             _queuePersonHandler = queuePersonHandler;
+            _dbcontext = dbconext;
         }
 
 
@@ -34,6 +37,7 @@ namespace ShiftSystem.API.Controllers
             try
             {
                 await _queuePersonHandler.Put(queuePerson);
+                _dbcontext.SaveChanges();
                 return Ok();
             }
             catch (Exception ex)

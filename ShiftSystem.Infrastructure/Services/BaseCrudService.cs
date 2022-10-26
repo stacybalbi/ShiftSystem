@@ -13,7 +13,7 @@ namespace ShiftSystem.Infrastructure.Services
 {
     public class BaseCrudService<TEntity> : IBaseCrudService<TEntity> where TEntity : BaseEntity
     {
-        protected readonly DbSet<TEntity> _dbSet;
+        protected DbSet<TEntity> _dbSet;
         private readonly IShiftSystemDbContext _dbContext;
         private readonly IMapper _mapper;
 

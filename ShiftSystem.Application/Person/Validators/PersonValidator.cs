@@ -12,11 +12,7 @@ namespace ShiftSystem.Application.Person.Validators
     {
         public PersonValidator()
         {
-            RuleFor(x => x.Name)
-                .EmailAddress()
-                .WithName("Invalid-name")
-                .WithMessage("Invalid Name");
-
+            
         }
     }
 }
