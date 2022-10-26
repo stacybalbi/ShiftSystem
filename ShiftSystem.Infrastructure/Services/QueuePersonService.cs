@@ -30,20 +30,6 @@ namespace ShiftSystem.Infrastructure.Services
 
         public async Task Put(QueuePersonDto dto)
         {
-            //var queue = _dbSet.Where(QueuePerson => QueuePerson.QueueId == dto.QueueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
-            //                                   .OrderBy(QueuePerson => QueuePerson.Created).ToList();
-
-            //if (queue.Any(x => x.PersonId == dto.PersonId))
-            //    throw new Exception("No se puede agregar la persona a la fila más de una vez.");
-
-            //QueuePersonDto entity = new QueuePersonDto
-            //{
-            //    Created = DateTime.Now,
-            //    PersonId = dto.PersonId,
-            //    QueueId = dto.QueueId,
-            //    Status = Domain.Enums.Status.OnStandby
-            //};
-
             await _dbSet.AddAsync(_mapper.Map<QueuePerson>(dto));
             _dbContext.SaveChanges();
         }
