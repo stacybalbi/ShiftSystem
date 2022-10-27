@@ -54,7 +54,7 @@ namespace ShiftSystem.Infrastructure.Context
         {
             return base.SaveChanges();
         }
-
+        
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
 

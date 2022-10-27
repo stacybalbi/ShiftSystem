@@ -10,6 +10,10 @@ namespace ShiftSystem.Application.Person.Dto
 {
     public class PersonDto : BaseDto
     {
-        public string Name { get; set; }
+        public Uri fileUri { get; set; }
+        public int Age { get; set; }
+        public decimal Height { get; set; }
+        public decimal Weight { get; set; }
+
     }
 }

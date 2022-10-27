@@ -20,6 +20,8 @@ namespace ShiftSystem.Infrastructure
             services.AddTransient<IQueueService, QueueService>();
             services.AddTransient<IQueuePersonService, QueuePersonService>();
             services.AddTransient<IShiftSystemDbContext, ShiftSystemDbContext>();
+            services.AddTransient<IAzureFormRecognizerService, AzureFormRecognizerService>();
+
 
             services.AddDbContext<ShiftSystemDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ShiftSystemdb")));

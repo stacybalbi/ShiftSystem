@@ -34,14 +34,14 @@ namespace ShiftSystem.Application.QueuePerson.Handlers
 
         public async Task<List<QueuePersonDto>> GetByQueueId(int queueId)
         {
-            return _mapper.Map<List<QueuePersonDto>>(_crudService.Query().Where(QueuePerson => QueuePerson.QueueId == queueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
+            return _mapper.Map<List<QueuePersonDto>>(_crudService.Query().Where(QueuePerson => QueuePerson.QueueId == queueId)
                                                            .OrderBy(QueuePerson => QueuePerson.Created)
                                                            .ToList());
         }
 
         public async Task Put(QueuePersonDto dto)
         {
-            var queue = _crudService.Query().Where(QueuePerson => QueuePerson.QueueId == dto.QueueId && QueuePerson.Status != Domain.Enums.Status.Inactive)
+            var queue = _crudService.Query().Where(QueuePerson => QueuePerson.QueueId == dto.QueueId)
                                                .OrderBy(QueuePerson => QueuePerson.Created).ToList();
 
             if (queue.Any(x => x.PersonId == dto.PersonId))

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShiftSystem.Application.Generic.Dto;
 using ShiftSystem.Application.Generic.Interfaces;
+using ShiftSystem.Application.Interfaces;
 using ShiftSystem.Application.Person.Dto;
 using ShiftSystem.Application.QueuePerson.Dto;
 using ShiftSystem.Domain.Entities;
@@ -16,12 +17,21 @@ namespace ShiftSystem.Application.Generic.Handlers
     {
         private readonly IBaseCrudService<TEntity> _crudService;
         public readonly IMapper _mapper;
+        private IPersonService crudService;
+        private IMapper mapper;
 
         public BaseCrudHandler(IBaseCrudService<TEntity> crudService, IMapper mapper)
         {
             _crudService = crudService;
             _mapper = mapper;
         }
+
+        public BaseCrudHandler(IPersonService crudService, IMapper mapper)
+        {
+            this.crudService = crudService;
+            this.mapper = mapper;
+        }
+
         public virtual async Task<TDto> Create(TDto dto)
         {
             var entity = _mapper.Map<TEntity>(dto);

@@ -3,6 +3,7 @@ using ShiftSystem.Application.Generic.Handlers;
 using ShiftSystem.Application.Generic.Interfaces;
 using ShiftSystem.Application.Interfaces;
 using ShiftSystem.Application.Person.Dto;
+using ShiftSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,14 @@ namespace ShiftSystem.Application.Person.Handlers
     }
     public class PersonHandler : BaseCrudHandler<PersonDto, Domain.Entities.Person>, IPersonHandler
     {
-        public PersonHandler(IPersonService crudService, IMapper mapper) : base(crudService, mapper)
+        private readonly IPersonService _personService;
+        private readonly IAzureFormRecognizerService _azureFormRecognizedService;
+        private readonly IMapper _mapper;
+        public PersonHandler(IPersonService personService,IMapper mapper,IAzureFormRecognizerService azureFormRecognizedService): base(personService,mapper)
         {
+            _personService = personService;
+            _mapper = mapper;
+            _azureFormRecognizedService = azureFormRecognizedService;
         }
 
         public new async Task<PersonDto> GetById(int id)
@@ -42,7 +49,26 @@ namespace ShiftSystem.Application.Person.Handlers
 
         public new async Task<PersonDto> Create(PersonDto dto)
         {
-            return await base.Create(dto);
+            var azureConfig = new AzureConfig
+            {
+                endpoint = "https://validatorrr.cognitiveservices.azure.com/",
+                key = "6e6fe3c8899d452ca8cc2902008fc812",
+                modelId = "dni"
+            };
+
+            var person = _mapper.Map<Domain.Entities.Person>(dto);
+
+            var analyzeResult = await _azureFormRecognizedService.GetAnalyzeResultValue(azureConfig, dto.fileUri);
+
+            var personFromAnalyzeResult = await _personService.GetPersonFromAnalyzeResult(analyzeResult);
+
+            person.Name = personFromAnalyzeResult.Name;
+
+            person.dni = personFromAnalyzeResult.dni;
+
+            person = await _personService.Create(person);
+
+            return _mapper.Map(person, dto);
         }
 
         public async Task<List<PersonDto>> Get(int top)

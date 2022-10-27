@@ -13,10 +13,12 @@ namespace ShiftSystem.Domain.Entities
         public int QueueId { get; set; }
         public int PersonId { get; set; }
         public Status Status { get; set; }
+        public Enums.Conditions Conditions { get; set; } = Enums.Conditions.Normal;
         public DateTime Created { get; set; }
         [ForeignKey("QueueId")]
         public virtual Queue Queue { get; set; }
         [ForeignKey("PersonId")]
         public virtual Person Person { get; set; }
+
     }
 }
